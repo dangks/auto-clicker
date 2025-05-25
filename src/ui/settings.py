@@ -1,11 +1,11 @@
 import tkinter as tk
-from tkinter import ttk
-
+from tkinter import ttk, messagebox
 class Settings(tk.Toplevel):
     def __init__(self, parent, mouse_controller, keyboard_controller):
         super().__init__(parent)
         self.mouse_controller = mouse_controller
         self.keyboard_controller = keyboard_controller
+        self.quit_callback = None
         
         self.title("自动连点器")
         self.geometry("400x350")
@@ -24,9 +24,19 @@ class Settings(tk.Toplevel):
         # 设置窗口关闭按钮行为
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
         
+    def set_quit_callback(self, callback):
+        """设置退出回调函数"""
+        self.quit_callback = callback
+
     def on_closing(self):
         """窗口关闭时的处理"""
-        self.iconify()  # 最小化窗口而不是隐藏
+        if self.mouse_controller.is_clicking():
+            self.iconify()  # 如果正在点击，则最小化
+        else:
+            # 如果没在点击，则询问是否退出
+            if messagebox.askokcancel("退出", "确定要退出程序吗?"):
+                if self.quit_callback:
+                    self.quit_callback()
 
     def create_widgets(self):
         # 间隔设置框架
