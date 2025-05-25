@@ -1,0 +1,10 @@
+# This file is used to install the required packages for the project.
+
+# 基础GUI库
+tk==0.1.0
+tkinter>=8.6
+
+# 自动化控制
+pyautogui==0.9.54
+keyboard==0.13.5
+pywin32>=305
